@@ -12,7 +12,7 @@ library(maptools)  #to utilize rgeos gUnion command later
 ##Set your parent (upper level) GPR directory
 ## NOTICE slash orientation....
 ##parent.folder = "//cainhoy/data/BigProjectData/GPR_Data/_Process01"  #example if you use a network share
-parent.folder = "I:/MALAGS_Jan2016_CoastalPlain_Group2"
+parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/pender/050212/raw/050212/raw"
 setwd(parent.folder)
 
 ##Obtain the list of all _POS.csv files in the directories and sub-directories
