@@ -4,7 +4,7 @@
 ## M. Scott Harris, Ph.D.  ScottHarris2007-gmail
 ##
 
-#install.packages(c("rgdal", "sp"))
+install.packages(c("rgdal", "sp"))
 library(rgdal)
 library(sp)
 library(maptools)  #to utilize rgeos gUnion command later
@@ -12,12 +12,12 @@ library(maptools)  #to utilize rgeos gUnion command later
 ##Set your parent (upper level) GPR directory
 ## NOTICE slash orientation....
 ##parent.folder = "//cainhoy/data/BigProjectData/GPR_Data/_Process01"  #example if you use a network share
-parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/pender/050212/raw/050212/raw"
+parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/pender/050212/raw/050212/raw/"
 setwd(parent.folder)
 
 ##Obtain the list of all _POS.csv files in the directories and sub-directories
 ##  in preparation for the loop to create all shapefiles from the COR files
-fileList.full <- dir(pattern="_POS.csv$", recursive = TRUE, include.dirs=TRUE)
+fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, include.dirs=TRUE)
        #summary(fileList)  ##shows the Length Class and Mode of the dataframe
        #head(fileList)  ##shows the first few rows of the dataframe
        #fileList[12]  ##brings out element 12 in the file list
@@ -27,7 +27,7 @@ fileList <- vector()
 
 ##Filter out files that have 0 size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
-if (file.info(fileList.full[i])$size >0)
+if (file.info(fileList.full[i])$size > 0)
 fileList <- c(fileList, fileList.full[i])
 }
 
@@ -61,9 +61,8 @@ names(corData) <- c("latitude","longitude","Zmeters","ShotPoint")
 ##*********************
 # Split the ddmm.mmmmmm and -ddmm.mmmmmm vectors
 
-corData$latitude <- substr(corData$latitude, 1,2)+(substr(corData$latitude),3,4,5,6,7,8,9)/60)
-
-corData$longitude <-substr(corData$longitude, 2,3)+(substr(corData$longitude),4,5,6,7,8,9,10,11,12)/60)
+corData$latitude <- as.numeric(substr(corData$latitude, 1, 2))+(as.numeric(substr(corData$latitude,3,9))/60)
+corData$longitude <- as.numeric(substr(corData$longitude, 1, 3))+(as.numeric(substr(corData$longitude,4,12))/60)
 
 
 ##*********************
