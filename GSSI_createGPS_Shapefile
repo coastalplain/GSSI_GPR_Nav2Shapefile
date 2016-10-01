@@ -115,4 +115,4 @@ print("before Write corDataAll")
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 print("after Write corDataAll")
 
-#end of R script
+#end of R script 
