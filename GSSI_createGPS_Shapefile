@@ -42,6 +42,12 @@ fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, 
 fileCount <- NROW(fileList.full)  #how many files will need to be processed, use as counter
 startTime <- format(Sys.time(), format="%Y%m%d%H%M%S")
 fileList <- vector()
+############################################################################################
+##########Large loop to check for any files at all.  If not, end this craziness
+#########################
+
+if(fileCount > 0) {
+
 
 ##Filter out files that have 0 size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
@@ -114,5 +120,10 @@ gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
 print("before Write corDataAll")
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 print("after Write corDataAll")
+} ## END OF LARGE CRAZINESS
+else
+{
+ print("no files found -- next area please")
+}
 
 #end of R script 
