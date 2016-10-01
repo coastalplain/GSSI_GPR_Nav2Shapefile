@@ -27,12 +27,18 @@ fileList <- vector()
 
 ##Filter out files that have 0 size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
-if (file.info(fileList.full[i])$size > 0)
+if (file.info(fileList.full[i])$size > 2)
 fileList <- c(fileList, fileList.full[i])
 }
 
-## Begin Loop for each COR file
+###################################################################
+##TEMPORARY## COMMENT OUT WHEN DONE WITH FILTER ZERO  ABOVE
+fileList <- fileList.full   #just to get a good file list---zero filter above not working
+###################################################################
 
+
+
+## Begin Loop for each COR file
 for (i in 1:length(fileList)) {
 
 fileList[i]
