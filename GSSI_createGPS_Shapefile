@@ -7,7 +7,7 @@
 
 #INSTALL PACKAGES NOT YET INSTALLED
 #FROM:  http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
-list.of.packages <- c("rgdal", "sp", "maptools", "rgeos")
+list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk")
 new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
 if(length(new.packages)) install.packages(new.packages)
 
@@ -23,12 +23,14 @@ library(rgdal)
 library(sp)
 library(maptools)
 library(rgeos)
+library(tcltk)
 
 ##Set your parent (upper level) GPR directory
 ## NOTICE slash orientation....
 
 ##parent.folder = "//cainhoy/data/BigProjectData/GPR_Data/_Process01"  #example if you use a network share
-parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/"
+#parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/"
+parent.folder <- choose.dir(getwd(), "Choose a suitable folder")
 setwd(parent.folder)
 
 ##Obtain the list of all _POS.csv files in the directories and sub-directories
