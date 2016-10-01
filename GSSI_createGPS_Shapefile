@@ -65,6 +65,8 @@ for (i in 1:length(fileList)) {
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
      gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
      gssi.cor.shapefile <- paste("pt_",gssi.cor.filename, sep="", collapse=NULL)
+     
+     print(gssi.cor.filename)
 
      ##http://stackoverflow.com/questions/30127293/how-to-convert-csv-to-shp-in-r
      ##some code was pulled from @iembry off the above weblink and modified
