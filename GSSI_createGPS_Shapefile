@@ -46,8 +46,9 @@ fileList <- vector()
 ##########Large loop to check for any files at all.  If not, end this craziness
 #########################
 
-if(fileCount > 0) {
+if(fileCount > 0){
 
+print("Have Files...am continuing")
 
 ##Filter out files that have 0 size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
@@ -121,9 +122,6 @@ print("before Write corDataAll")
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 print("after Write corDataAll")
 } ## END OF LARGE CRAZINESS
-else
-{
- print("no files found -- next area please")
-}
+
 
 #end of R script 
