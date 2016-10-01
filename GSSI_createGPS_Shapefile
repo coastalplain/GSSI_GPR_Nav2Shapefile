@@ -97,16 +97,10 @@ for (i in 1:length(fileList)) {
 
      ##create a spatial class and export to a shapefile
      coordinates(corData)<-~longitude+latitude
-     class(corData)  #check to see that indeed a spatial file was produced
-     
-     shpSuffix <- ".shp"
-     shpFileName <- paste(gssi.cor.shapefile, shpSuffix, sep = "")
-     shpFileName
-     
-     if (!file.exists(shpFileName)) {
-        print("inLoop")
-        writeOGR(corData, gssi.cor.path, gssi.cor.shapefile, driver = "ESRI Shapefile")
-        }
+     #class(corData)  #check to see that indeed a spatial file was produced
+     gssi.cor.shapefile.NewName <- paste(startTime,"_",gssi.cor.shapefile, sep="", collapse=NULL)
+#     writeOGR(corData, gssi.cor.path, gssi.cor.shapefile, driver = "ESRI Shapefile")
+      writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
      
 }  #end of for loop
 
@@ -115,6 +109,8 @@ for (i in 1:length(fileList)) {
 coordinates(corDataAll)<-~longitude+latitude
 class(corDataAll)
 gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
+print("before Write corDataAll")
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
+print("after Write corDataAll")
 
 #end of R script
