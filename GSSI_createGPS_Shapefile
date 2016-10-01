@@ -45,7 +45,8 @@ fileList <- vector()
 ############################################################################################
 ##########Large loop to check for any files at all.  If not, end this craziness
 #########################
-
+fileCount
+fileList
 if(fileCount > 0){
 
 print("Have Files...am continuing")
