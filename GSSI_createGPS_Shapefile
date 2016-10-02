@@ -7,16 +7,9 @@
 
 #INSTALL PACKAGES NOT YET INSTALLED
 #FROM:  http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
-list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk")
-new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
-if(length(new.packages)) install.packages(new.packages)
-
-#LIST INSTALLED PACKAGES (just for fun, really)
-#FROM: https://www.r-bloggers.com/list-of-user-installed-r-packages-and-their-versions/
-#ip <- as.data.frame(installed.packages()[,c(1,3:4)])
-#rownames(ip) <- NULL
-#ip <- ip[is.na(ip$Priority),1:2,drop=FALSE]
-#print(ip, row.names=FALSE)
+   list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk")
+   new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
+   if(length(new.packages)) install.packages(new.packages)
 
 #LOAD LIBRARIES
 library(rgdal)
@@ -26,10 +19,6 @@ library(rgeos)
 library(tcltk)
 
 ##Set your parent (upper level) GPR directory
-## NOTICE slash orientation....
-
-##parent.folder = "//cainhoy/data/BigProjectData/GPR_Data/_Process01"  #example if you use a network share
-#parent.folder = "O:/ScottDropbox/Dropbox/Presentations/Former/GSA2012_CP_EWrightLead/"
 parent.folder <- choose.dir(getwd(), "Choose a suitable folder")
 setwd(parent.folder)
 
@@ -53,7 +42,7 @@ print("Have Files...am continuing")
 
 ##Filter out files that have to small a size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
-     if (file.info(fileList.full[i])$size > 39)
+     if (file.info(fileList.full[i])$size > 47)
      fileList <- c(fileList, fileList.full[i])
 }
 
@@ -73,7 +62,7 @@ for (i in 1:length(fileList)) {
      ##some code was pulled from @iembry off the above weblink and modified
 
      #READ IN THE DATA
-     corData <- read.table(file=gssi.cor.working, header=FALSE,sep=",", skip=1)
+     corData <- read.csv(file=gssi.cor.working, header=FALSE,sep=",", skip=1)
      class(corData)  #just shows that the data are in a data.frame
      
      #REMOVE ALL LINES WITH NO Latitude or Longitude or ShotPoint
@@ -124,7 +113,12 @@ gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
 print("before Write corDataAll")
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 print("after Write corDataAll")
+
 } ## END OF LARGE CRAZINESS
 
+##EXPORT FINAL POINT SHAPEFILE WHEREVER YOU WANT IT
+  final.folder <- choose.dir(getwd(), "Choose a folder for the corDataAll shapefile")
+  setwd(final.folder)
+  writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 
 #end of R script 
