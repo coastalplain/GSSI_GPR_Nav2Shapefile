@@ -1,0 +1,10 @@
+##
+## The script below is meant to be run in R
+## Currently, it is being tested on a 32-bit Windows installation
+## M. Scott Harris, Ph.D.  ScottHarrisGEO-gmail
+##
+## PURPOSE
+##    find all GSSI-formatted Navigation files and print the first two lines of each.
+##    somewhere on my hard drives there is one that is not correct, and I can't test for it, so I'm recursively searching
+
+df <- read.csv(file="my.large.file.csv",nrows=2000)
