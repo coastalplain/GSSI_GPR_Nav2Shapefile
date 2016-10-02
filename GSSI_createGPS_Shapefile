@@ -51,10 +51,10 @@ if(fileCount > 0){
 
 print("Have Files...am continuing")
 
-##Filter out files that have 0 size (aka no GPS coords) file.info(fileList[i])$size = 0
+##Filter out files that have to small a size (aka no GPS coords) file.info(fileList[i])$size = 0
 for (i in 1:length(fileList.full)) {
-if (file.info(fileList.full[i])$size > 39)
-fileList <- c(fileList, fileList.full[i])
+     if (file.info(fileList.full[i])$size > 39)
+     fileList <- c(fileList, fileList.full[i])
 }
 
 ## Begin Loop for each COR file
