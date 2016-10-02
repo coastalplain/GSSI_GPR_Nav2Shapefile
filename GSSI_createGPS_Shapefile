@@ -119,9 +119,10 @@ for (i in 1:length(fileList)) {
 coordinates(corDataAll)<-~longitude+latitude
 class(corDataAll)
 gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
-#writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 setwd(final.folder)
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
+#NEED TO PUT TOGETHER SCRIPT FOR PROJECTION FILE TO WGS 1984
+cat(showWKT(proj4string(corDataAll)),file=gssi.cor.shapefile.all.proj)
 print("After SECOND write to final.folder")
 
 } ## END OF LARGE CRAZINESS
