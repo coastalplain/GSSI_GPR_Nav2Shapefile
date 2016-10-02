@@ -96,6 +96,24 @@ for (i in 1:length(fileList)) {
 
 #DUPLICATE for testing later
     x <- corData
+    for (j in 1:length(x)) 
+      {  if (x$longitude[j] < 0) 
+         { 
+              #calculate less than 0 longitude in decimal degrees
+         var1 <- round(abs(trunc(x$longitude[1])), digits=-2)
+         var2 <- abs(var1-abs(x$longitude[1]))
+         var3 <- (var1/100+var2/60)*-1
+         x$longitude[j] <- var3
+         
+         } else { 
+         #establish greater than 0 longitude
+         
+         }
+    
+      }
+    
+    
+    
 # LATITUDE ddmm.123456 to dd.dddddddd     
     corData$latitude <- as.numeric(substr(corData$latitude, 1, 2))+(as.numeric(substr(corData$latitude,3,9))/60)
 
