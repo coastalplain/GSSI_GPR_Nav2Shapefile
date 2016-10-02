@@ -15,6 +15,31 @@ setwd(parent.folder)
 fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, include.dirs=TRUE)
 fileCount <- NROW(fileList.full)  #how many files will need to be processed, use as counter
 startTime <- format(Sys.time(), format="%Y%m%d%H%M%S")
+
+# FILTER OUT SMALL FILES
 fileList <- vector()
+for (i in 1:length(fileList.full)) {
+     if (file.info(fileList.full[i])$size > 39)
+     fileList <- c(fileList, fileList.full[i])
+}
 
+for (i in 1:length(fileList)) {
+     fileList[i]
+     fileList[i]
+     gssi.cor.working <- fileList[i]  #full path and filename
+     gssi.cor.filename <- basename(gssi.cor.working)  #filename only
+     gssi.cor.path <- dirname(gssi.cor.working)  #directory only
+     gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
+     gssi.cor.shapefile <- paste("pt_",gssi.cor.filename, sep="", collapse=NULL)
+     
+     print(gssi.cor.filename)
 
+     ##http://stackoverflow.com/questions/30127293/how-to-convert-csv-to-shp-in-r
+     ##some code was pulled from @iembry off the above weblink and modified
+
+     #READ IN THE DATA
+     df <- read.csv(file=gssi.cor.working, header=FALSE,sep=",")
+     class(df)  #just shows that the data are in a data.frame
+     linesThree <- head(df, 3)
+     print(linesThree)
+}
