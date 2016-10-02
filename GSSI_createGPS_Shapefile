@@ -19,7 +19,7 @@ library(rgeos)
 library(tcltk)
 
 ##Set your parent (upper level) GPR directory
-parent.folder <- "F:/" #choose.dir(getwd(), "Choose a suitable folder")
+parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
@@ -52,12 +52,13 @@ for (i in 1:length(fileList.full)) {
 
 ## Begin Loop for each COR file
 for (i in 1:length(fileList)) {
-
+     print(i)
      fileList[i]
      gssi.cor.working <- fileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
-if(gssi.cor.path != ".") {
+     
+  if(gssi.cor.path != ".") {
      gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
      } else {
      gssi.cor.fullpath <- getwd()
@@ -119,9 +120,7 @@ if(gssi.cor.path != ".") {
 coordinates(corDataAll)<-~longitude+latitude
 class(corDataAll)
 gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
-print("before Write corDataAll")
-writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
-print("after Write corDataAll")
+#writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 setwd(final.folder)
 writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
 print("After SECOND write to final.folder")
