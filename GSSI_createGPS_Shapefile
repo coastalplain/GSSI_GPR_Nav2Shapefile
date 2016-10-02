@@ -7,7 +7,7 @@
 
 #INSTALL PACKAGES NOT YET INSTALLED
 #FROM:  http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
-   list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk")
+   list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk", "stringi", "stringr")
    new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[,"Package"])]
    if(length(new.packages)) install.packages(new.packages)
 
@@ -17,9 +17,11 @@ library(sp)
 library(maptools)
 library(rgeos)
 library(tcltk)
+library(stringi)
+library(stringr)
 
 ##Set your parent (upper level) GPR directory
-parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
+parent.folder <- "F:/GPR/TEST" #choose.dir(getwd(), "Choose Starting Point for Search")
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
@@ -95,8 +97,18 @@ for (i in 1:length(fileList)) {
        names(corData) <- c("latitude","longitude","Zmeters","ShotPoint","filePath","fileName","fileID","Computer")
      # Split the ddmm.mmmmmm and -ddmm.mmmmmm vectors
        corData$latitude <- as.numeric(substr(corData$latitude, 1, 2))+(as.numeric(substr(corData$latitude,3,9))/60)
+     # work with the Longitude string to handle different lengths
+       lonSplit1 <- strsplit(toString(corData$longitude), "[.]")
+       lonsubSplit1a <- unlist(lonSplit1)[2*(1:length(lonSplit1))-1]
+       lonsubSplit1b <- unlist(lonSplit1)[2*(1:length(lonSplit1))  ]
+       lonSplit1.length <- nchar(lonsubSplit1a)*(-1)
+       lonSplit1.length2 <- "-3"
+       lonDegrees <- str_sub(lonsubSplit1a,lonSplit1.length,lonSplit1.length2)
+             
        corData$longitude <- (as.numeric(substr(corData$longitude, 1, 3))*-1)+(as.numeric(substr(corData$longitude,4,12))/60)
        corData$longitude <- corData$longitude*(-1)
+      print(corData$longitude)
+      print(split1)
 
      ##making a large dataframe of all processed data, then convert to a shapefile
      if (i == 1) {
@@ -106,12 +118,11 @@ for (i in 1:length(fileList)) {
           corDataAll <- rbind(corDataAll, corData)
              }
 
-     ##create a spatial class and export to a shapefile
+##create a spatial class and export to a shapefile
      coordinates(corData)<-~longitude+latitude
-     #class(corData)  #check to see that indeed a spatial file was produced
      gssi.cor.shapefile.NewName <- paste(startTime,"_",gssi.cor.shapefile, sep="", collapse=NULL)
-#     writeOGR(corData, gssi.cor.path, gssi.cor.shapefile, driver = "ESRI Shapefile")
-      writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
+     #UNCOMMENT next line if you want to create a shapefile in each folder from each COR file
+     #writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
      
 }  #end of for loop
 
