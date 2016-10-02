@@ -94,35 +94,9 @@ for (i in 1:length(fileList)) {
      corData$computerName <- computerName
      names(corData) <- c("latitude","longitude","Zmeters","ShotPoint","filePath","fileName","fileID","Computer")
 
-#DUPLICATE for testing later
-    x <- corData
-    for (j in 1:length(x)) 
-      {  if (x$longitude[j] < 0) 
-         { 
-              #calculate less than 0 longitude in decimal degrees
-         var1 <- round(abs(trunc(x$longitude[1])), digits=-2)
-         var2 <- abs(var1-abs(x$longitude[1]))
-         var3 <- (var1/100+var2/60)*-1
-         x$longitude[j] <- var3
-         
-         } else { 
-         #establish greater than 0 longitude
-         
-         }
-    
-      }
-    
-    
-    
-# LATITUDE ddmm.123456 to dd.dddddddd     
-    corData$latitude <- as.numeric(substr(corData$latitude, 1, 2))+(as.numeric(substr(corData$latitude,3,9))/60)
-
-# LONGITUDE to dd.dddddddd
-     # work with the Longitude string to handle different lengths
-           
-       corData$longitude <- (as.numeric(substr(corData$longitude, 1, 3))*-1)+(as.numeric(substr(corData$longitude,4,12))/60)
-       corData$longitude <- corData$longitude*(-1)
-       print(corData$longitude)
+    #Convert GSSI decimal minutes data to decimal degrees for geography
+      corData$longitude <- sign(corData$longitude)*((abs(trunc(corData$longitude/100))) + ((abs(corData$longitude) - (abs(trunc(corData$longitude/100)))*100)/60))
+      corData$latitude <-  sign(corData$latitude)*((abs(trunc(corData$latitude/100))) + ((abs(corData$latitude) - (abs(trunc(corData$latitude/100)))*100)/60))  
 
      ##making a large dataframe of all processed data, then convert to a shapefile
      if (i == 1) {
