@@ -7,4 +7,14 @@
 ##    find all GSSI-formatted Navigation files and print the first two lines of each.
 ##    somewhere on my hard drives there is one that is not correct, and I can't test for it, so I'm recursively searching
 
-df <- read.csv(file="my.large.file.csv",nrows=2000)
+# FIND A PLACE TO START
+parent.folder <- choose.dir(getwd(), "Choose a suitable folder")
+setwd(parent.folder)
+
+# MAKE A LIST OF ALL FILES WITHIN AND BENEATH THE START PLACE
+fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, include.dirs=TRUE)
+fileCount <- NROW(fileList.full)  #how many files will need to be processed, use as counter
+startTime <- format(Sys.time(), format="%Y%m%d%H%M%S")
+fileList <- vector()
+
+
