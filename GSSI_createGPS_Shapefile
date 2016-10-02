@@ -21,7 +21,7 @@ library(stringi)
 library(stringr)
 
 ##Set your parent (upper level) GPR directory
-parent.folder <- "F:/GPR/TEST" #choose.dir(getwd(), "Choose Starting Point for Search")
+parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
