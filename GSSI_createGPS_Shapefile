@@ -111,18 +111,21 @@ for (i in 1:length(fileList)) {
      gssi.cor.shapefile.NewName <- paste(startTime,"_",gssi.cor.shapefile, sep="", collapse=NULL)
      #UNCOMMENT next line if you want to create a shapefile in each folder from each COR file
      #writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
-     
 }  #end of for loop
 
 ##Write out the final Shapefile with all files processed
+  coordinates(corDataAll)<-~longitude+latitude
+  class(corDataAll)
+  gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
+  setwd(final.folder)
+  writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
+  
+#COPY WGS 1984 projection file from final.folder (hard wired into code)
+  fileProjection <- paste(gssi.cor.shapefile.all,".prj")
+  fileProjection <- gsub(" ","",fileProjection)
+  file.copy("wgs1984.prj",fileProjection)
+  print("Projection file exported for WGS 1984 -- mofify accordingly")
 
-coordinates(corDataAll)<-~longitude+latitude
-class(corDataAll)
-gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
-setwd(final.folder)
-writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
-#NEED TO PUT TOGETHER SCRIPT FOR PROJECTION FILE TO WGS 1984
-cat(showWKT(proj4string(corDataAll)),file=gssi.cor.shapefile.all.proj)
 print("After SECOND write to final.folder")
 
 } ## END OF LARGE CRAZINESS
