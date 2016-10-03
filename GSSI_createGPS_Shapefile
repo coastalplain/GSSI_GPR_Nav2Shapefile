@@ -130,4 +130,5 @@ print("After SECOND write to final.folder")
 
 } ## END OF LARGE CRAZINESS
 
+print("Done with searching ",parent.folder)
 #end of R script 
