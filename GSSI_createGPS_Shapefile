@@ -53,14 +53,14 @@ print("Have Files...am continuing")
 for (i in 1:length(fileList.full)) {
      if (file.info(fileList.full[i])$size > 47)
      fileListLarge <- c(fileListLarge, fileList.full[i])
-}
+   }
 for (i in 1:length(fileListLarge)) {
      testdf <- fileListLarge[i]
-     if ( )
+     if (ncol(testdf <- read.csv(fileListLarge[i] )
      #ncol(df <- read.csv(the filename here)
      #colnames(df[i]) #SHOULD BE THE VALUE OF "LAT.dddmm.m."
      
-}
+   }
 ########################
 ##########################
 ## Begin Loop for each COR file
