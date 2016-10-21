@@ -46,6 +46,7 @@ fileCount
 fileListLarge <- vector()
 testdf <- vector()
 cleanFileList <- vector()
+rejectFileList <- vector()
 
 if(fileCount > 0){
 
@@ -63,17 +64,17 @@ for (i in 1:length(fileListLarge))
      testdf <- fileListLarge[i]
      if (ncol(read.csv(file = testdf)) == 4) 
         fileList <- c(fileList, fileListLarge[i])
-     checkColumns <- (colnames(read.csv(file=fileList[i])))
-     if (checkColumns[1] == "LAT.dddmm.m.")
+#     checkColumns <- (colnames(read.csv(file=fileList[i])))
+#     if (checkColumns[1] == "LAT.dddmm.m.")
         cleanFileList <- c(cleanFileList, fileList[i])
    }
 ########################
 ##########################
 ## Begin Loop for each COR file
-for (i in 1:length(fileList)) {
+for (i in 1:length(cleanFileList)) {
      print(i)
      fileList[i]
-     gssi.cor.working <- fileList[i]  #full path and filename
+     gssi.cor.working <- cleanFileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
      
@@ -133,7 +134,7 @@ for (i in 1:length(fileList)) {
 ##Write out the final Shapefile with all files processed
   coordinates(corDataAll)<-~longitude+latitude
   class(corDataAll)
-  gssi.cor.shapefile.all <- paste("ptGPRall_",startTime, sep="", collapse=NULL)
+  gssi.cor.shapefile.all <- paste("ptGSSIall_",startTime, sep="", collapse=NULL)
   setwd(final.folder)
   writeOGR(corDataAll, getwd(), gssi.cor.shapefile.all, driver = "ESRI Shapefile")
   
