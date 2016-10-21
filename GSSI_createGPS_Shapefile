@@ -36,13 +36,15 @@ fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, 
 fileCount <- NROW(fileList.full)  #how many files will need to be processed, use as counter
 startTime <- format(Sys.time(), format="%Y%m%d%H%M%S")
 fileList <- vector()
+
 computerName <- Sys.getenv("COMPUTERNAME")
 ############################################################################################
 ##########Large loop to check for any files at all.  If not, end this craziness
 #########################
 fileCount
-FileListLarge
-fileList
+
+fileListLarge <- vector()
+testdf <- vector()
 
 if(fileCount > 0){
 
@@ -54,12 +56,17 @@ for (i in 1:length(fileList.full)) {
      if (file.info(fileList.full[i])$size > 47)
      fileListLarge <- c(fileListLarge, fileList.full[i])
    }
+   
 for (i in 1:length(fileListLarge)) {
      testdf <- fileListLarge[i]
-     if (ncol(testdf <- read.csv(fileListLarge[i] )
+     if (ncol(read.csv(file=testdf)) = 4) 
+        {if (colnames(read.csv(file-testdf)) = "LAT.ddmm.m.")
+        fileList <- fileListLarge[i]
+        }
+        }
      #ncol(df <- read.csv(the filename here)
      #colnames(df[i]) #SHOULD BE THE VALUE OF "LAT.dddmm.m."
-     
+ 
    }
 ########################
 ##########################
