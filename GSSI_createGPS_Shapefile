@@ -45,6 +45,7 @@ fileCount
 
 fileListLarge <- vector()
 testdf <- vector()
+cleanFileList <- vector()
 
 if(fileCount > 0){
 
@@ -57,16 +58,14 @@ for (i in 1:length(fileList.full)) {
      fileListLarge <- c(fileListLarge, fileList.full[i])
    }
    
-for (i in 1:length(fileListLarge)) {
+for (i in 1:length(fileListLarge)) 
+  {
      testdf <- fileListLarge[i]
-     if (ncol(read.csv(file=testdf)) = 4) 
-        {if (colnames(read.csv(file-testdf)) = "LAT.ddmm.m.")
-        fileList <- fileListLarge[i]
-        }
-        }
-     #ncol(df <- read.csv(the filename here)
-     #colnames(df[i]) #SHOULD BE THE VALUE OF "LAT.dddmm.m."
- 
+     if (ncol(read.csv(file = testdf)) == 4) 
+        fileList <- c(fileList, fileListLarge[i])
+     checkColumns <- (colnames(read.csv(file=fileList[i])))
+     if (checkColumns[1] == "LAT.dddmm.m.")
+        cleanFileList <- c(cleanFileList, fileList[i])
    }
 ########################
 ##########################
@@ -148,5 +147,5 @@ print("After SECOND write to final.folder")
 
 } ## END OF LARGE CRAZINESS
 
-print("Done with searching ",parent.folder)
+#print("Done with searching ", parent.folder)
 #end of R script 
