@@ -23,7 +23,8 @@ library(stringr)
 
 ###################################
 ##Set your parent (upper level) GPR directory to recursively search below
-parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
+#parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
+parent.folder <- "Y:/011_Harris/Galahad_Backups/Galahad_D_Backup20100802/data/GPR"
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
@@ -46,54 +47,54 @@ fileListLarge <- vector()
 testdf <- vector()
 cleanFileList <- vector()
 rejectFileList <- vector()
+fileList <- vector()
+cleanFileList <- vector()
+corDataAll <- vector()
+fileList.fourColumns <- vector()
+
+
+########BEGIN if(fileCount)
 if(fileCount > 0){
 
-print("Have Files...am continuing after I list them for you here: ")
-fileCount
-fileList()
-print("############################################################")
+  #####  Make sure files are clean and capable of loading
 
-#########################################################################################################
-#####  Make sure files are clean and capable of loading
-
-##Check size to make sure there are GPS coords.
-##    reduce fileList.full to fileListLarge
-for (i in 1:length(fileList.full)) {
+  ##Check size to make sure there are GPS coords.
+  ##    reduce fileList.full to fileListLarge
+  for (i in 1:length(fileList.full)) {
      if (file.info(fileList.full[i])$size > 47)
      fileListLarge <- c(fileListLarge, fileList.full[i])
    }
    
-##Check fileListLarge to see if it has 4 columns   
-for (i in 1:length(fileListLarge)) 
-  {
+  ##Check fileListLarge to see if it has 4 columns   
+  for (i in 1:length(fileListLarge)) 
+    {
      testdf <- fileListLarge[i]
      if (ncol(read.csv(file = testdf)) == 4) 
-        fileList.fourColumns <- c(fileList, fileListLarge[i])
-   }
-fileList.fourColumns()
-##Check fileList.fourColumns to make sure the first column is proper
-for (i in 1:length(fileList.fourColumns))
+        fileList.fourColumns <- c(fileList.fourColumns, fileListLarge[i])
+     }
+  ##Check fileList.fourColumns to make sure the first column is proper
+  for (i in 1:length(fileList.fourColumns))
+    {
      checkColumns <- (colnames(read.csv(file=fileList.fourColumns[i])))
      if (checkColumns[1] == "LAT.dddmm.m.")
         cleanFileList <- c(cleanFileList, fileList.fourColumns[i])
-   }
-cleanFileList()
-########################
-##########################
-## Begin Loop for each COR file
-for (i in 1:length(cleanFileList)) {
-     fileList[i]
-     gssi.cor.working <- fileList[i]  #full path and filename
+    }
+fileList.fourColumns
+  ##########################
+  ## Begin Loop for each COR file
+  for (i in 1:length(cleanFileList)) {
+     cleanFileList[i]
+     gssi.cor.working <- cleanFileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
      print("dirname file: ")
      print(dirname(gssi.cor.working))
      
-  if(gssi.cor.path != ".") {
-     gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
-     } else {
-     gssi.cor.fullpath <- getwd()
-     }
+    if(gssi.cor.path != ".") {
+       gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
+       } else {
+       gssi.cor.fullpath <- getwd()
+       }
      
      gssi.cor.shapefile <- paste("pt_",gssi.cor.filename, sep="", collapse=NULL)
      
@@ -102,11 +103,11 @@ for (i in 1:length(cleanFileList)) {
      ##http://stackoverflow.com/questions/30127293/how-to-convert-csv-to-shp-in-r
      ##some code was pulled from @iembry off the above weblink and modified
 
-#READ IN THE DATA
+  #READ IN THE DATA
      corData <- read.csv(file=gssi.cor.working, header=FALSE,sep=",", skip=1)
      class(corData)  #just shows that the data are in a data.frame
 
-#REMOVE ALL LINES WITH NO Latitude or Longitude or ShotPoint
+  #REMOVE ALL LINES WITH NO Latitude or Longitude or ShotPoint
      #  That is, V1, V2, or V4     V3, as altitude, can be 0
      ## GSSI FORMAT:  LAT(dddmm.m)   LONG(dddmm.m)   Z(M) SCAN#
      ## GSSI FORMAT       V1             V2           V3    V4
@@ -160,8 +161,6 @@ print("After SECOND write to final.folder")
 } 
 
 ## END OF LARGE CRAZINESS
-
-#print("Done with searching ", parent.folder)
 #end of R script 
 
 
