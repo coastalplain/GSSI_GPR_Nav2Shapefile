@@ -28,7 +28,9 @@ library(stringr)
 ###################################
 ##Set your parent (upper level) GPR directory to recursively search below
 #parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
-parent.folder <- "Y:/011_Harris"
+parent.folder <- "Y:/011_Harris/Galahad_Backups/Galahad_D_Backup20100802/research/Howard_Sandy_Island/Appendix/GPR/Data/GPS+/Other061201/Original_GPS" 
+                 #"Y:/011_Harris"
+
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
@@ -53,65 +55,78 @@ cleanFileList <- vector()
 rejectFileList <- vector()
 fileList <- vector()
 cleanFileList <- vector()
+cleanFileList2 <- vector()
 corDataAll <- vector()
 fileList.fourColumns <- vector()
 
 
 ########BEGIN if(fileCount)
-if(fileCount > 0){
-
-  #####  Make sure files are clean and capable of loading
-
-  ##Check size to make sure there are GPS coords.
-  ##    reduce fileList.full to fileListLarge
-  for (i in 1:length(fileList.full)) {
-     if (file.info(fileList.full[i])$size > 47)
-     fileListLarge <- c(fileListLarge, fileList.full[i])
-   }
+if(fileCount > 0)
+{
+    #####  Make sure files are clean and capable of loading
+    ##Check size to make sure there are GPS coords.
+    ##    reduce fileList.full to fileListLarge
+    for (i in 1:length(fileList.full)) {
+        if (file.info(fileList.full[i])$size > 47)
+        fileListLarge <- c(fileListLarge, fileList.full[i])
+        }
    
-  ##Check fileListLarge to see if it has 4 columns   
-  for (i in 1:length(fileListLarge)) 
-    {
-     testdf <- fileListLarge[i]
-     if (ncol(read.csv(file = testdf)) == 4) 
+    ##Check fileListLarge to see if it has 4 columns   
+    for (i in 1:length(fileListLarge)) 
+       {
+        testdf <- fileListLarge[i]
+        if (ncol(read.csv(file = testdf)) == 4) 
         fileList.fourColumns <- c(fileList.fourColumns, fileListLarge[i])
-     }
-  ##Check fileList.fourColumns to make sure the first column is proper
-  for (i in 1:length(fileList.fourColumns))
-    {
-     checkColumns <- (colnames(read.csv(file=fileList.fourColumns[i])))
-     if (checkColumns[1] == "LAT.dddmm.m.")
-        cleanFileList <- c(cleanFileList, fileList.fourColumns[i])
-    }
-fileList.fourColumns
+       }
+       
+    ##Check fileList.fourColumns to make sure the first column is the right header of "LAT.dddmm.m."
+    for (i in 1:length(fileList.fourColumns))
+       {
+        checkColumns <- (colnames(read.csv(file=fileList.fourColumns[i])))
+        if (checkColumns[1] == "LAT.dddmm.m.")
+        cleanFileList2 <- c(cleanFileList2, fileList.fourColumns[i])
+        }
+        
+     ##Check cleanFileList for any files that contain NO good lines
+     for (i in 1:length(cleanFileList2))
+        {
+        fileName.testing <- paste(parent.folder,"/",cleanFileList2[i],sep="")
+        fileData.testing <- read.csv(file=fileName.testing, header=FALSE, sep=",", skip=1)
+        names(fileData.testing) <- c("latitude","longitude","Zmeters","ShotPoint")
+        fileData.testing <- fileData.testing[!fileData.testing$latitude == "0", ]
+        fileData.testing <- fileData.testing[!fileData.testing$longitude == "0", ]
+        if (nrow(fileData.testing) > 0)
+           cleanFileList <- c(cleanFileList, cleanFileList2[i])
+        }
+
   ##########################
-  ## Begin Loop for each COR file
-  for (i in 1:length(cleanFileList)) {
-     cleanFileList[i]
+  ## Begin Loop for each _POS.CSV file
+  for (i in 1:length(cleanFileList)) 
+     {
+     paste("ID=", i, "  File=", cleanFileList[i], sep="")
      gssi.cor.working <- cleanFileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
-     print("dirname file: ")
-     print(dirname(gssi.cor.working))
+     paste("cleanFileList ID=", i, "dirname file: ", dirname(gssi.cor.working), sep=" ")
      
-    if(gssi.cor.path != ".") {
-       gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
-       } else {
-       gssi.cor.fullpath <- getwd()
-       }
-     
-     gssi.cor.shapefile <- paste("pt_",gssi.cor.filename, sep="", collapse=NULL)
-     
+     if(gssi.cor.path != ".") 
+        {
+        gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
+        } else 
+        {
+        gssi.cor.fullpath <- getwd()
+        }
+     gssi.cor.shapefile <- paste("ptGSSI_",gssi.cor.filename, sep="", collapse=NULL)
      print(gssi.cor.filename)
 
      ##http://stackoverflow.com/questions/30127293/how-to-convert-csv-to-shp-in-r
      ##some code was pulled from @iembry off the above weblink and modified
 
-  #READ IN THE DATA
+   #READ IN THE DATA
      corData <- read.csv(file=gssi.cor.working, header=FALSE,sep=",", skip=1)
      class(corData)  #just shows that the data are in a data.frame
 
-  #REMOVE ALL LINES WITH NO Latitude or Longitude or ShotPoint
+   #REMOVE ALL LINES WITH NO Latitude or Longitude or ShotPoint
      #  That is, V1, V2, or V4     V3, as altitude, can be 0
      ## GSSI FORMAT:  LAT(dddmm.m)   LONG(dddmm.m)   Z(M) SCAN#
      ## GSSI FORMAT       V1             V2           V3    V4
@@ -120,7 +135,6 @@ fileList.fourColumns
      names(corData) <- c("latitude","longitude","Zmeters","ShotPoint")
      corData <- corData[!corData$latitude == "0", ]
      corData <- corData[!corData$longitude == "0", ]
-
      ##Add the header information
      corData$filepath <- gssi.cor.fullpath
      corData$filename <- gssi.cor.filename
@@ -133,18 +147,21 @@ fileList.fourColumns
       corData$latitude <-  sign(corData$latitude)*((abs(trunc(corData$latitude/100))) + ((abs(corData$latitude) - (abs(trunc(corData$latitude/100)))*100)/60))  
 
      ##making a large dataframe of all processed data, then convert to a shapefile
-     if (i == 1) {
-          corDataAll <- corData
-     } else {
-          #build a large dataframe with all datapoints to be changed to a shapefile in last step
-          corDataAll <- rbind(corDataAll, corData)
-             }
-
-##create a spatial class and export to a shapefile
-     coordinates(corData)<-~longitude+latitude
-     gssi.cor.shapefile.NewName <- paste(startTime,"_",gssi.cor.shapefile, sep="", collapse=NULL)
-     #UNCOMMENT next line if you want to create a shapefile in each folder from each COR file
-     #writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
+     if (i == 1) 
+        {
+        corDataAll <- corData
+        } else 
+        {
+        #build a large dataframe with all datapoints to be changed to a shapefile in last step
+        corDataAll <- rbind(corDataAll, corData)
+        }
+    print(i)
+    ##create a spatial class and export to a shapefile
+       coordinates(corData)<-~longitude+latitude
+       gssi.cor.shapefile.NewName <- paste(startTime,"_",gssi.cor.shapefile, sep="", collapse=NULL)
+          #UNCOMMENT next line if you want to create a shapefile in each folder from each COR file
+          #writeOGR(corData, gssi.cor.path, gssi.cor.shapefile.NewName, driver = "ESRI Shapefile")
+  
 }  #end of for loop
 
 ##Write out the final Shapefile with all files processed
