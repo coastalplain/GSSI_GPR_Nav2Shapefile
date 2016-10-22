@@ -66,15 +66,14 @@ for (i in 1:length(fileListLarge))
         fileList <- c(fileList, fileListLarge[i])
 #     checkColumns <- (colnames(read.csv(file=fileList[i])))
 #     if (checkColumns[1] == "LAT.dddmm.m.")
-        cleanFileList <- c(cleanFileList, fileList[i])
+#        cleanFileList <- c(cleanFileList, fileList[i])
    }
 ########################
 ##########################
 ## Begin Loop for each COR file
 for (i in 1:length(cleanFileList)) {
-     print(i)
      fileList[i]
-     gssi.cor.working <- cleanFileList[i]  #full path and filename
+     gssi.cor.working <- fileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
      
