@@ -4,7 +4,7 @@
 ## M. Scott Harris, Ph.D.  ScottHarrisGEO-gmail
 ##
 
-
+###################################
 #INSTALL PACKAGES NOT YET INSTALLED
 #FROM:  http://stackoverflow.com/questions/4090169/elegant-way-to-check-for-missing-packages-and-install-them
    list.of.packages <- c("rgdal", "sp", "maptools", "rgeos", "tcltk", "stringi", "stringr")
@@ -20,13 +20,17 @@ library(tcltk)
 library(stringi)
 library(stringr)
 
-##Set your parent (upper level) GPR directory
+
+###################################
+##Set your parent (upper level) GPR directory to recursively search below
 parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
 setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
 final.folder <- "K:/Dropbox/Data/GPR" #choose.dir(getwd(), "FINAL Output Folder for the corDataAll shapefile")
 
+
+#########################################################################################################
 ##Obtain the list of all _POS.csv files in the directories and sub-directories
 ##  in preparation for the loop to create all shapefiles from the COR files
 fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, include.dirs=TRUE)
@@ -36,38 +40,44 @@ fileList.full <- dir(pattern="_POS.CSV$", recursive = TRUE, ignore.case = TRUE, 
 fileCount <- NROW(fileList.full)  #how many files will need to be processed, use as counter
 startTime <- format(Sys.time(), format="%Y%m%d%H%M%S")
 fileList <- vector()
-
 computerName <- Sys.getenv("COMPUTERNAME")
-############################################################################################
-##########Large loop to check for any files at all.  If not, end this craziness
-#########################
-fileCount
 
 fileListLarge <- vector()
 testdf <- vector()
 cleanFileList <- vector()
 rejectFileList <- vector()
-
 if(fileCount > 0){
 
-print("Have Files...am continuing")
-##########################
-##Filter out files that have to small a size (aka no GPS coords) file.info(fileList[i])$size = 0
-##########################
+print("Have Files...am continuing after I list them for you here: ")
+fileCount
+fileList()
+print("############################################################")
+
+#########################################################################################################
+#####  Make sure files are clean and capable of loading
+
+##Check size to make sure there are GPS coords.
+##    reduce fileList.full to fileListLarge
 for (i in 1:length(fileList.full)) {
      if (file.info(fileList.full[i])$size > 47)
      fileListLarge <- c(fileListLarge, fileList.full[i])
    }
    
+##Check fileListLarge to see if it has 4 columns   
 for (i in 1:length(fileListLarge)) 
   {
      testdf <- fileListLarge[i]
      if (ncol(read.csv(file = testdf)) == 4) 
-        fileList <- c(fileList, fileListLarge[i])
-#     checkColumns <- (colnames(read.csv(file=fileList[i])))
-#     if (checkColumns[1] == "LAT.dddmm.m.")
-#        cleanFileList <- c(cleanFileList, fileList[i])
+        fileList.fourColumns <- c(fileList, fileListLarge[i])
    }
+fileList.fourColumns()
+##Check fileList.fourColumns to make sure the first column is proper
+for (i in 1:length(fileList.fourColumns))
+     checkColumns <- (colnames(read.csv(file=fileList.fourColumns[i])))
+     if (checkColumns[1] == "LAT.dddmm.m.")
+        cleanFileList <- c(cleanFileList, fileList.fourColumns[i])
+   }
+cleanFileList()
 ########################
 ##########################
 ## Begin Loop for each COR file
@@ -76,6 +86,8 @@ for (i in 1:length(cleanFileList)) {
      gssi.cor.working <- fileList[i]  #full path and filename
      gssi.cor.filename <- basename(gssi.cor.working)  #filename only
      gssi.cor.path <- dirname(gssi.cor.working)  #directory only
+     print("dirname file: ")
+     print(dirname(gssi.cor.working))
      
   if(gssi.cor.path != ".") {
      gssi.cor.fullpath <- paste(getwd(),"/",gssi.cor.path,"/", sep="", collapse=NULL)
@@ -145,7 +157,12 @@ for (i in 1:length(cleanFileList)) {
 
 print("After SECOND write to final.folder")
 
-} ## END OF LARGE CRAZINESS
+} 
+
+## END OF LARGE CRAZINESS
 
 #print("Done with searching ", parent.folder)
 #end of R script 
+
+
+
