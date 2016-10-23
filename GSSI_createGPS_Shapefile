@@ -27,8 +27,8 @@ library(stringr)
 
 ###################################
 ##Set your parent (upper level) GPR directory to recursively search below
-#parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
-parent.folder <- "Y:/011_Harris"
+parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
+#parent.folder <- "Y:/011_Harris"
                  #"Y:/011_Harris/Galahad_Backups/Galahad_D_Backup20100802/research/Howard_Sandy_Island/Appendix/GPR/Data/GPS+/Other061201/Original_GPS" 
                  #"Y:/011_Harris"
 
