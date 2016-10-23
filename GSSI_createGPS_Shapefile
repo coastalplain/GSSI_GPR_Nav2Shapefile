@@ -179,10 +179,9 @@ if(fileCount > 0)
   print("Projection file exported for WGS 1984 -- mofify accordingly")
 
 print("After SECOND write to final.folder")
-
 } 
 
-## END OF LARGE CRAZINESS
+
 #end of R script 
 
 
