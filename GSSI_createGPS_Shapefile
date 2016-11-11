@@ -27,8 +27,8 @@ library(stringr)
 
 ###################################
 ##Set your parent (upper level) GPR directory to recursively search below
-parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
-#parent.folder <- "Y:/011_Harris"
+#parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
+parent.folder <- "T:/"
                  #"Y:/011_Harris/Galahad_Backups/Galahad_D_Backup20100802/research/Howard_Sandy_Island/Appendix/GPR/Data/GPS+/Other061201/Original_GPS" 
                  #"Y:/011_Harris"
 
@@ -181,6 +181,11 @@ if(fileCount > 0)
 print("After SECOND write to final.folder")
 } 
 length(fileList)
+
+print(paste("The starting point: ", parent.folder))
+print(paste("Name of Shapefile if created: ", gssi.cor.shapefile.all))
+print(paste("End of GSSI Run"))
+
 
 #end of R script 
 
