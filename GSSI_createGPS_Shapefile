@@ -29,7 +29,7 @@ rm(list=ls(all=TRUE))
 ##Set your parent (upper level) GPR directory to recursively search below
 
 #parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
-   parent.folder <- "T:/"
+   parent.folder <- "O:/"
    setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
@@ -58,6 +58,8 @@ cleanFileList2 <- vector()
 corDataAll <- vector()
 fileList.fourColumns <- vector()
 gssi.cor.working <- vector()
+exportPath <- vector()
+gssi.cor.shapfile.all <- paste("No GSSI shapefile created")
 
 
 ####VERIFY FILES ARE GOOD TO CREATE SHAPEFILES
@@ -191,9 +193,9 @@ print(paste("End of GSSI Run"))
 
 #Export the rejected file list so GSSI file locations can be documented, even without the location data
 if(length(rejectFileList) > 0) {
-   for (i in 1:length(rejectFileList)) 
+   for (j in 1:length(rejectFileList)) 
      {
-     exportPath[i] <- paste(parent.folder,rejectFileList[i], sep="")
+     exportPath[j] <- paste(parent.folder,rejectFileList[i], sep="")
      }
   }
 rejectFileName <- paste(final.folder,"/","ptGSSIall_",startTime,"_Rejects.csv",sep="")
