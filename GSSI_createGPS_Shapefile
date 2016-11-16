@@ -29,7 +29,7 @@ rm(list=ls(all=TRUE))
 ##Set your parent (upper level) GPR directory to recursively search below
 
 #parent.folder <- choose.dir(getwd(), "Choose Starting Point for Search")
-   parent.folder <- "O:/"
+   parent.folder <- "Q:/"
    setwd(parent.folder)
 
 ##Set your final Point Shapefile Destination Folder
